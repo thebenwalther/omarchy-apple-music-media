@@ -1,0 +1,2 @@
+module BmwMedia
+singleton MediaSession 1.0 MediaSession.qml

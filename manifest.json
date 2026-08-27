@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.thebenwalther.apple-music",
+  "name": "Apple Music Media",
+  "version": "1.0.0",
+  "author": "Ben Walther",
+  "description": "Responsive Apple-first MPRIS controls with shared multi-monitor session state and accessible playback tools",
+  "kinds": ["bar-widget"],
+  "keepLoaded": true,
+  "entryPoints": { "barWidget": "BarWidget.qml" },
+  "barWidget": {
+    "displayName": "Apple Music Media",
+    "description": "Apple-first, capability-aware MPRIS controls",
+    "category": "Media",
+    "defaultSection": "center",
+    "allowMultiple": false
+  }
+}

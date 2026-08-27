@@ -1,0 +1,10 @@
+{
+  "name": "omarchy-apple-music-media",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Marketplace-ready Apple Music MPRIS widget for Omarchy",
+  "scripts": {
+    "test": "bun test"
+  }
+}
