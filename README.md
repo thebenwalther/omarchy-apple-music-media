@@ -73,7 +73,7 @@ It:
 - accepts artwork only from Chromium's owner-private temporary artwork file pattern, checks an 8 MiB encoded-size ceiling before loading it, and caps decoded image dimensions;
 - renders MPRIS-controlled metadata as bounded plain text.
 
-It does not use `sudo`, install services, create a browser profile, read browser credentials, persist track history, or contact an API of its own.
+It does not request elevated privileges, install services, create a browser profile, read browser credentials, persist track history, or contact an API of its own.
 
 ## Development
 
