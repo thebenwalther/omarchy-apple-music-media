@@ -40,6 +40,8 @@ Item {
   property string pendingArtPath: ""
   property string probingArtUrl: ""
   property string probingArtPath: ""
+  readonly property string securityHelperPath: decodeURIComponent(
+    String(Qt.resolvedUrl("SecurityHelper.py")).replace(/^file:\/\//, ""))
 
   property string sleepMode: ""
   property int sleepPresetMinutes: 0
@@ -285,7 +287,7 @@ Item {
     if (pendingArtPath === "" || artworkProbe.running) return
     probingArtUrl = pendingArtUrl
     probingArtPath = pendingArtPath
-    artworkProbe.command = ["env", "LC_ALL=C", "stat", "-c", "%F|%s|%a", "--", probingArtPath]
+    artworkProbe.command = ["/usr/bin/python3", securityHelperPath, "artwork", probingArtPath]
     artworkProbe.running = true
   }
 
@@ -326,19 +328,18 @@ Item {
     id: artworkProbe
     stdout: StdioCollector { id: artworkProbeOutput; waitForEnd: true }
     onExited: function(exitCode) {
-      var fields = String(artworkProbeOutput.text || "").trim().split("|")
-      var encodedBytes = Number(fields.length > 1 ? fields[1] : 0)
-      var ownerPrivate = fields.length > 2 && /^[0-7]00$/.test(fields[2])
-      if (exitCode === 0 && fields[0] === "regular file" && ownerPrivate
-          && probingArtUrl === pendingArtUrl && encodedBytes > 0 && encodedBytes <= 8 * 1024 * 1024)
-        session.artUrl = probingArtUrl
-      if (probingArtUrl !== pendingArtUrl && pendingArtPath !== "") Qt.callLater(session.startArtworkProbe)
+      var privateUrl = String(artworkProbeOutput.text || "").trim()
+      if (exitCode === 0 && session.probingArtUrl === session.pendingArtUrl
+          && /^file:\/\/\/.+\/omarchy-apple-music-media-[0-9]+\/art-[A-Za-z0-9_-]+\.img$/.test(privateUrl))
+        session.artUrl = privateUrl
+      if (session.probingArtUrl !== session.pendingArtUrl && session.pendingArtPath !== "")
+        Qt.callLater(session.startArtworkProbe)
     }
   }
 
   Process {
     id: windowProbe
-    command: ["hyprctl", "clients", "-j"]
+    command: ["/usr/bin/python3", session.securityHelperPath, "clients"]
     stdout: StdioCollector { id: windowProbeOutput; waitForEnd: true }
     onExited: function(exitCode) {
       session.applePids = exitCode === 0 ? MediaController.appleMusicPids(windowProbeOutput.text || "[]") : []

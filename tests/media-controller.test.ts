@@ -280,9 +280,10 @@ describe("QML accessibility and theme structure", () => {
     const bar = readFileSync(new URL("BarWidget.qml", plugin), "utf8");
     const hero = readFileSync(new URL("ArtworkHero.qml", plugin), "utf8");
     expect(session).toContain("MediaController.plainMetadata(currentPlayer.trackTitle, 160)");
-    expect(session).toContain('["env", "LC_ALL=C", "stat", "-c", "%F|%s|%a", "--", probingArtPath]');
-    expect(session).toContain('fields[0] === "regular file" && ownerPrivate');
-    expect(session).toContain("encodedBytes <= 8 * 1024 * 1024");
+    expect(session).toContain('["/usr/bin/python3", securityHelperPath, "artwork", probingArtPath]');
+    expect(session).toContain('session.artUrl = privateUrl');
+    expect(session).not.toContain('session.artUrl = probingArtUrl');
+    expect(session).toContain('["/usr/bin/python3", session.securityHelperPath, "clients"]');
     expect(bar).toContain("textFormat: Text.PlainText");
     expect(hero).toContain("textFormat: Text.PlainText");
     expect(bar).toContain("sourceSize.width: 64");

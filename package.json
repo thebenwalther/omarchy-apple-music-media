@@ -5,6 +5,6 @@
   "type": "module",
   "description": "Marketplace-ready Apple Music MPRIS widget for Omarchy",
   "scripts": {
-    "test": "bun test"
+    "test": "bun test && python3 -m unittest discover -s tests -p 'test_*.py'"
   }
 }

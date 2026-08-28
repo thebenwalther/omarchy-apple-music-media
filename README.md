@@ -23,7 +23,7 @@ A cinematic, responsive Apple Music bar widget for Omarchy. It controls Apple's 
 - Omarchy 4.0.1 or newer with shell plugin support
 - Chromium or another browser supported by `omarchy launch ... webapp`, with Widevine available
 - An active Apple Music subscription
-- `hyprctl` and GNU `stat` (included with Omarchy)
+- `hyprctl` and Python 3 (included with Omarchy)
 - Optional: `wl-copy` for Copy Now Playing
 
 ## Install
@@ -70,7 +70,8 @@ It:
 - keeps sleep timers and track history only in shell-process memory;
 - writes appearance preferences only when you change them in the plugin UI;
 - optionally passes sanitized Now Playing text to `wl-copy`;
-- accepts artwork only from Chromium's owner-private temporary artwork file pattern, checks an 8 MiB encoded-size ceiling before loading it, and caps decoded image dimensions;
+- opens Chromium artwork without following symlinks, verifies its owner, private permissions, regular-file type, and 8 MiB encoded-size ceiling on that descriptor, then renders only a private immutable snapshot; caps decoded image dimensions;
+- bounds `hyprctl clients -j` output to 1 MiB before JSON parsing;
 - renders MPRIS-controlled metadata as bounded plain text.
 
 It does not request elevated privileges, install services, create a browser profile, read browser credentials, persist track history, or contact an API of its own.
@@ -78,7 +79,7 @@ It does not request elevated privileges, install services, create a browser prof
 ## Development
 
 ```bash
-bun test
+bun run test
 omarchy plugin validate .
 ```
 
